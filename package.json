@@ -1,0 +1,24 @@
+{
+  "name": "notifications-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "DEBUG=notifications-ui:* node ./bin/www",
+    "dev": "DEBUG=notifications-ui:* nodemon ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^8.0.0",
+    "express": "~4.16.1",
+    "express-validator": "^5.3.1",
+    "knex": "^0.17.6",
+    "morgan": "~1.9.1",
+    "objection": "^1.6.9",
+    "rate-limit": "^0.1.1"
+  },
+  "devDependencies": {
+    "jest": "^24.7.1",
+    "supertest": "^4.0.2"
+  }
+}

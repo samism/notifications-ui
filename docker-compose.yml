@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  server:
+    restart: on-failure
+    build: ./
+    expose:
+      - ${API_SERVER_PORT}
+    environment:
+      PORT: ${API_SERVER_PORT}
+      NODE_ENV: ${NODE_ENV}
+    ports:
+      - ${API_SERVER_PORT}:${API_SERVER_PORT}
+    volumes:
+      - ./:/usr/app/notifications-ui-server
+
+  client:
+    restart: on-failure
+    container_name: client
+    build: ./client
+    expose:
+      - ${NGINX_PORT}
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}
+    volumes:
+      - ./client/src:/usr/app/notifications-ui-client/src
+    links:
+      - server
