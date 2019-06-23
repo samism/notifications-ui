@@ -1,5 +1,5 @@
 {
-  "name": "notifications-ui",
+  "name": "notifications-ui-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
