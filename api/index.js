@@ -20,7 +20,7 @@ router.get('/ping', function(req, res, next) {
 router.get('/notifications/', async (req, res, next) => {
   // const notifications = await notifQueries.getAll();
   const notifications = await Notification.query()
-    .select('title', 'body', 'created_at', 'type')
+    .select('notification_id', 'title', 'body', 'created_at', 'type')
     .join(
       'issue_types',
       'notifications.issue_type_id',
@@ -48,7 +48,7 @@ router.get(
 
     try {
       const [notification] = await Notification.query()
-        .select('title', 'body', 'created_at', 'type')
+        .select('notification_id', 'title', 'body', 'created_at', 'type')
         .join(
           'issue_types',
           'notifications.issue_type_id',

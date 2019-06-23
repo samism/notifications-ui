@@ -7,7 +7,8 @@ afterAll(async () => {
   await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
 });
 
-notifications.forEach(notification => {
+notifications.forEach((notification, index) => {
+  notification['notification_id'] = index + 1;
   notification['type'] =
     notification['issue_type_id'] === 1 ? 'data' : 'config';
   delete notification['issue_type_id'];
