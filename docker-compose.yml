@@ -1,28 +1,47 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:12-alpine
+    restart: on-failure
+    environment:
+      - POSTGRES_USER: ${POSTGRES_USER}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - 5432:5432
+
   server:
     restart: on-failure
     build: ./
     expose:
       - ${API_SERVER_PORT}
     environment:
-      PORT: ${API_SERVER_PORT}
-      NODE_ENV: ${NODE_ENV}
+      - NODE_ENV: ${NODE_ENV}
+      - PORT: ${API_SERVER_PORT}
+      - POSTGRES_USER: ${POSTGRES_USER}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - POSTGRES_DB: ${POSTGRES_DB}
+      - POSTGRES_HOST: ${POSTGRES_HOST}
     ports:
       - ${API_SERVER_PORT}:${API_SERVER_PORT}
     volumes:
       - ./:/usr/app/notifications-ui-server
+    depends_on:
+      - db
 
   client:
     restart: on-failure
     container_name: client
     build: ./client
     expose:
+      - NODE_ENV: ${NODE_ENV}
       - ${NGINX_PORT}
     ports:
       - ${NGINX_PORT}:${NGINX_PORT}
     volumes:
       - ./client/src:/usr/app/notifications-ui-client/src
+    depends_on:
+      - server
     links:
       - server
