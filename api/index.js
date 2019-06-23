@@ -5,6 +5,7 @@ const { param, body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 const { transaction } = require('objection');
 
+const knex = require('../db/knex');
 const { Notification } = require('../models');
 
 /**
@@ -18,9 +19,12 @@ router.get('/ping', function(req, res, next) {
  * Returns all notifications in the database.
  */
 router.get('/notifications/', async (req, res, next) => {
-  // const notifications = await notifQueries.getAll();
   const notifications = await Notification.query()
-    .select('notification_id', 'title', 'body', 'created_at', 'type')
+    .select(
+      knex.raw(
+        "notification_id, title, CONCAT(SUBSTRING(body, 1, 50), '...') as body, created_at, type"
+      )
+    )
     .join(
       'issue_types',
       'notifications.issue_type_id',

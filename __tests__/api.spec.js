@@ -3,10 +3,6 @@ const request = require('supertest');
 const app = require('../app');
 const { notifications } = require('../db/data');
 
-afterAll(async () => {
-  await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
-});
-
 notifications.forEach((notification, index) => {
   notification['notification_id'] = index + 1;
   notification['type'] =
@@ -14,20 +10,25 @@ notifications.forEach((notification, index) => {
   delete notification['issue_type_id'];
 });
 
+afterAll(async () => {
+  await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
+});
+
 describe('GET /notifications ', () => {
   it('should return an array of notification objects', async () => {
-    const response = await request(app).get('/api/v1/notifications');
+    const notifTruncated = notifications.map(notification => ({
+      ...notification,
+      body: notification.body.substring(0, 50) + '...'
+    }));
 
+    const response = await request(app).get('/api/v1/notifications');
     const withoutArbitraryProperties = response.body.map(notifObject => {
       const { created_at, ...rest } = notifObject;
-
       return rest;
     });
 
-    console.log(withoutArbitraryProperties);
-
     expect(withoutArbitraryProperties).toEqual(
-      expect.arrayContaining(notifications)
+      expect.arrayContaining(notifTruncated)
     );
     expect(response.statusCode).toBe(200);
   });
