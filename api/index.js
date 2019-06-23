@@ -19,7 +19,13 @@ router.get('/ping', function(req, res, next) {
  */
 router.get('/notifications/', async (req, res, next) => {
   // const notifications = await notifQueries.getAll();
-  const notifications = await Notification.query();
+  const notifications = await Notification.query()
+    .select('title', 'body', 'created_at', 'type')
+    .join(
+      'issue_types',
+      'notifications.issue_type_id',
+      'issue_types.issue_type_id'
+    );
 
   return res.json(notifications);
 });
@@ -41,11 +47,14 @@ router.get(
     }
 
     try {
-      const [notification] = await Notification.query().where(
-        'notification_id',
-        '=',
-        req.params.id
-      );
+      const [notification] = await Notification.query()
+        .select('title', 'body', 'created_at', 'type')
+        .join(
+          'issue_types',
+          'notifications.issue_type_id',
+          'issue_types.issue_type_id'
+        )
+        .where('notification_id', '=', req.params.id);
 
       return res.json(notification);
     } catch (error) {

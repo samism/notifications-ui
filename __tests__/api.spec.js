@@ -7,15 +7,23 @@ afterAll(async () => {
   await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
 });
 
+notifications.forEach(notification => {
+  notification['type'] =
+    notification['issue_type_id'] === 1 ? 'data' : 'config';
+  delete notification['issue_type_id'];
+});
+
 describe('GET /notifications ', () => {
   it('should return an array of notification objects', async () => {
     const response = await request(app).get('/api/v1/notifications');
 
     const withoutArbitraryProperties = response.body.map(notifObject => {
-      const { created_at, notification_id, ...rest } = notifObject;
+      const { created_at, ...rest } = notifObject;
 
       return rest;
     });
+
+    console.log(withoutArbitraryProperties);
 
     expect(withoutArbitraryProperties).toEqual(
       expect.arrayContaining(notifications)
@@ -27,7 +35,7 @@ describe('GET /notifications ', () => {
 describe('GET /notification/:id ', () => {
   it('should return a specific notification object', async () => {
     const response = await request(app).get('/api/v1/notification/1');
-    const { created_at, notification_id, ...rest } = response.body;
+    const { created_at, ...rest } = response.body;
 
     expect(rest).toEqual(notifications[0]);
     expect(response.statusCode).toBe(200);
