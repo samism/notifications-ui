@@ -3,23 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=notifications-ui:* node ./bin/www",
+    "createdb:test": "createdb test-notifications",
+    "createdb:prod": "createdb notifications",
+    "migrate:test": "knex migrate:latest --env test",
+    "migrate:prod": "knex migrate:latest --env prod",
+    "seed:test": "knex seed:run --env test",
+    "seed:prod": "knex seed:run --env prod",
+    "start": "npm run migrate:prod && npm run seed:prod && npm run dev",
+    "test": "npm run migrate:test && npm run seed:test && jest --detectOpenHandles",
     "dev": "DEBUG=notifications-ui:* nodemon ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
     "dotenv": "^8.0.0",
     "express": "~4.16.1",
+    "express-rate-limit": "^5.0.0",
     "express-validator": "^5.3.1",
     "knex": "^0.17.6",
     "morgan": "~1.9.1",
     "objection": "^1.6.9",
     "pg": "^7.11.0",
-    "rate-limit": "^0.1.1"
+    "rotating-file-stream": "^1.4.1"
   },
   "devDependencies": {
+    "debug": "^4.1.1",
     "jest": "^24.7.1",
     "supertest": "^4.0.2"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node"
   }
 }
