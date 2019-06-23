@@ -1,12 +1,14 @@
 import React from 'react';
 
 import NotificationFeed from './NotificationFeed';
+import HeaderText from './HeaderText';
 
 function App() {
   return (
-    <div className="App">
+    <React.Fragment>
+      <HeaderText>Your Notifications</HeaderText>
       <NotificationFeed />
-    </div>
+    </React.Fragment>
   );
 }
 
