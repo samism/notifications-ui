@@ -3,8 +3,8 @@ import { createGlobalStyle } from 'styled-components';
 import { Switch, Route } from 'react-router';
 
 import NotificationFeed from './NotificationFeed';
-import Notification from './Notification';
 import NotificationModal from './NotificationModal';
+import NotificationView from './NotificationView';
 
 const Reset = createGlobalStyle`
   html {
@@ -39,7 +39,7 @@ function App() {
       <Reset />
       <Switch>
         <Route exact path="/" component={NotificationFeed} />
-        <Route exact path="/notification/:id" component={Notification} />
+        <Route exact path="/notification/:id" component={NotificationView} />
         <Route exact path="/create" component={NotificationModal} />
       </Switch>
     </React.Fragment>

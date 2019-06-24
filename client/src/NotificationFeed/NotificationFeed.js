@@ -40,6 +40,7 @@ class NotificationFeed extends Component {
             <Notification
               key={notification.notification_id}
               data={notification}
+              url={`/notification/${notification.notification_id}`}
             />
           ))}
       </FeedStyle>

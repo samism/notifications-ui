@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import { convertIsoDateToNormal } from '../helpers';
 
@@ -16,22 +17,36 @@ const NotificationStyle = styled.section`
   cursor: pointer;
 `;
 
-const TypeStyle = styled.span`
+const TypeStyle = styled.p`
   &:first-letter {
     text-transform: capitalize;
   }
 `;
 
-const Notification = ({ data: notification }) => {
+const UnstyledLink = styled(Link)`
+  text-decoration: none;
+
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+  }
+`;
+
+const Notification = ({ data: notification, url = '/' }) => {
   return (
     <NotificationStyle title="Click to see full notification">
-      <TypeStyle>
-        [{notification.type} Issue] {notification.title}
-      </TypeStyle>
-      <br />
-      <p>{notification.body}</p>
-      <br />
-      <p>{convertIsoDateToNormal(notification.created_at)}</p>
+      <UnstyledLink to={url}>
+        <TypeStyle>
+          [{notification.type} Issue] {notification.title}
+        </TypeStyle>
+        <br />
+        <p>{notification.body}</p>
+        <br />
+        <p>{convertIsoDateToNormal(notification.created_at)}</p>
+      </UnstyledLink>
     </NotificationStyle>
   );
 };
