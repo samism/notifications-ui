@@ -5,16 +5,19 @@
   "scripts": {
     "createdb:test": "createdb test-notifications",
     "createdb:prod": "createdb notifications",
+    "migrate:dev": "knex migrate:latest --env dev",
     "migrate:test": "knex migrate:latest --env test",
     "migrate:prod": "knex migrate:latest --env prod",
+    "seed:dev": "knex seed:run --env dev",
     "seed:test": "knex seed:run --env test",
     "seed:prod": "knex seed:run --env prod",
-    "start": "npm run migrate:prod && npm run seed:prod && npm run dev",
     "test": "npm run migrate:test && npm run seed:test && jest --detectOpenHandles",
-    "dev": "DEBUG=notifications-ui:* nodemon ./bin/www"
+    "start": "cross-env NODE_ENV=prod npm run migrate:prod && npm run seed:prod && node ./bin/www",
+    "dev": "cross-env NODE_ENV=dev DEBUG=notifications-ui:* npm run migrate:dev && npm run seed:dev && nodemon ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
+    "cross-env": "^5.2.0",
     "dotenv": "^8.0.0",
     "express": "~4.16.1",
     "express-rate-limit": "^5.0.0",
