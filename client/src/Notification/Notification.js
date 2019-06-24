@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import { convertIsoDateToNormal } from '../helpers';
+import UnstyledLink from '../UnstyledLink';
 
 const NotificationStyle = styled.section`
   background-color: orange;
   min-height: 100px;
+  min-width: 275px;
   padding: 20px 20px;
   margin-bottom: 1em;
   border: 2px solid black;
@@ -20,18 +21,6 @@ const NotificationStyle = styled.section`
 const TypeStyle = styled.p`
   &:first-letter {
     text-transform: capitalize;
-  }
-`;
-
-const UnstyledLink = styled(Link)`
-  text-decoration: none;
-
-  &:focus,
-  &:hover,
-  &:visited,
-  &:link,
-  &:active {
-    text-decoration: none;
   }
 `;
 
