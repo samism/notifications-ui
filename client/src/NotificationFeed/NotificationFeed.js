@@ -4,6 +4,8 @@ import axios from 'axios';
 
 import Notification from '../Notification';
 import HeaderText from '../HeaderText';
+import AddNotificationButton from '../AddNotificationButton';
+import UnstyledLink from '../UnstyledLink';
 
 const FeedStyle = styled.main`
   height: 100%;
@@ -43,6 +45,9 @@ class NotificationFeed extends Component {
               url={`/notification/${notification.notification_id}`}
             />
           ))}
+        <UnstyledLink to="/create">
+          <AddNotificationButton />
+        </UnstyledLink>
       </FeedStyle>
     );
   }
