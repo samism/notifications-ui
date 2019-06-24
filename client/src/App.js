@@ -10,11 +10,16 @@ const Reset = createGlobalStyle`
   html {
     box-sizing: border-box;
     font-size: 16px;
+    height: 100vh;
   }
 
   *, *:before, *:after {
     box-sizing: inherit;
     font-family: 'Helvetica';
+  }
+
+  body {
+    min-height: 100vh;
   }
 
   body, h1, h2, h3, h4, h5, h6, p, ol, ul {

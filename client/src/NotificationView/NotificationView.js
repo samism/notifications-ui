@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Notification from '../Notification';
 
 const NotificationViewStyle = styled.main`
-  height: 100%;
+  height: 100vh;
   background-color: red;
   padding: 10px 2em 10px 2em;
   display: flex;
