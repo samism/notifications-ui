@@ -1,22 +1,22 @@
-require('dotenv').config();
-
 const path = require('path');
-
-const {
-  POSTGRES_USER: user,
-  POSTGRES_PASSWORD: password,
-  POSTGRES_DB: database,
-  POSTGRES_HOST: host
-} = process.env;
 
 module.exports = {
   prod: {
     client: 'pg',
+    connection: process.env.PG_CONNECTION_STRING,
+    migrations: {
+      directory: path.join(__dirname, '/db/migrations')
+    },
+    seeds: {
+      directory: path.join(__dirname, '/db/seeds')
+    }
+  },
+  dev: {
+    client: 'pg',
     connection: {
-      host,
-      user,
-      password: password || undefined,
-      database
+      host: 'localhost',
+      user: 'Sam',
+      database: 'notifications'
     },
     migrations: {
       directory: path.join(__dirname, '/db/migrations')
