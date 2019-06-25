@@ -12,8 +12,8 @@
     "seed:test": "knex seed:run --env test",
     "seed:prod": "knex seed:run --env prod",
     "test": "npm run migrate:test && npm run seed:test && jest --detectOpenHandles",
-    "start": "cross-env NODE_ENV=prod npm run migrate:prod && npm run seed:prod && node ./bin/www",
-    "dev": "cross-env NODE_ENV=dev DEBUG=notifications-ui:* npm run migrate:dev && npm run seed:dev && nodemon ./bin/www"
+    "start": "cross-env-shell NODE_ENV=prod \"npm run migrate:prod && npm run seed:prod && node ./bin/www\"",
+    "dev": "cross-env-shell NODE_ENV=dev DEBUG=notifications-ui:* \"npm run migrate:dev && npm run seed:dev && nodemon ./bin/www\""
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
