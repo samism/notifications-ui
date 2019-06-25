@@ -84,3 +84,12 @@ function onListening() {
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+process.on('unhandledRejection', (reason, p) => {
+  throw reason;
+});
+
+process.on('uncaughtException', error => {
+  console.error(error);
+  process.exit(1);
+});
