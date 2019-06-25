@@ -2,6 +2,7 @@ const request = require('supertest');
 
 const app = require('../app');
 const { notifications } = require('../db/data');
+const redisClient = require('../redis-client');
 
 notifications.forEach((notification, index) => {
   notification['notification_id'] = index + 1;
@@ -11,6 +12,7 @@ notifications.forEach((notification, index) => {
 });
 
 afterAll(async () => {
+  await redisClient.quit();
   await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
 });
 
