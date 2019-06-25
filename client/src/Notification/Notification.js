@@ -18,23 +18,31 @@ const NotificationStyle = styled.section`
   cursor: pointer;
 `;
 
-const TypeStyle = styled.p`
+const NotificationTitleStyle = styled.p`
+  font-weight: bold;
+
   &:first-letter {
     text-transform: capitalize;
   }
+`;
+
+const NotificationDateStyle = styled.p`
+  font-style: italic;
 `;
 
 const Notification = ({ data: notification, url = '/' }) => {
   return (
     <NotificationStyle title="Click to see full notification">
       <UnstyledLink to={url}>
-        <TypeStyle>
+        <NotificationTitleStyle>
           [{notification.type} Issue] {notification.title}
-        </TypeStyle>
+        </NotificationTitleStyle>
         <br />
         <p>{notification.body}</p>
         <br />
-        <p>{convertIsoDateToNormal(notification.created_at)}</p>
+        <NotificationDateStyle>
+          {convertIsoDateToNormal(notification.created_at)}
+        </NotificationDateStyle>
       </UnstyledLink>
     </NotificationStyle>
   );
