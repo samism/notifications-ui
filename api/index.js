@@ -1,12 +1,14 @@
 const express = require('express');
-const router = express.Router();
-
 const { param, body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 const { transaction } = require('objection');
+const crypto = require('crypto');
 
+const router = express.Router();
 const knex = require('../db/knex');
 const { Notification } = require('../models');
+
+const redisClient = require('../redis-client');
 
 /**
  * Basic healthcheck endpoint
@@ -19,6 +21,12 @@ router.get('/ping', function(req, res, next) {
  * Returns all notifications in the database.
  */
 router.get('/notifications/', async (req, res, next) => {
+  const existing = await redisClient.getAsync('notifications:all');
+
+  if (existing) {
+    return res.json(JSON.parse(existing));
+  }
+
   const notifications = await Notification.query()
     .select(
       knex.raw(
@@ -30,6 +38,11 @@ router.get('/notifications/', async (req, res, next) => {
       'notifications.issue_type_id',
       'issue_types.issue_type_id'
     );
+
+  const cachedResult = await redisClient.setAsync(
+    'notifications:all',
+    JSON.stringify(notifications)
+  );
 
   return res.json(notifications);
 });
@@ -50,6 +63,14 @@ router.get(
       return res.status(422).json({ errors: result.array()[0] });
     }
 
+    const existing = await redisClient.getAsync(
+      `notifications:${req.params.id}`
+    );
+
+    if (existing) {
+      return res.json(JSON.parse(existing));
+    }
+
     try {
       const [notification] = await Notification.query()
         .select('notification_id', 'title', 'body', 'created_at', 'type')
@@ -59,6 +80,11 @@ router.get(
           'issue_types.issue_type_id'
         )
         .where('notification_id', '=', req.params.id);
+
+      const cachedResult = await redisClient.setAsync(
+        `notifications:${req.params.id}`,
+        JSON.stringify(notification)
+      );
 
       return res.json(notification);
     } catch (error) {
@@ -94,9 +120,25 @@ router.post(
       return res.status(422).json({ errors: result.array()[0] });
     }
 
+    const hash = crypto
+      .createHash('sha1')
+      .update(JSON.stringify(req.body.notification))
+      .digest('hex');
+
+    const existing = await redisClient.getAsync(hash);
+
+    if (existing) {
+      return res.json(JSON.parse(existing));
+    }
+
     try {
       const insertedGraph = await transaction(Notification.knex(), trx =>
         Notification.query(trx).insertAndFetch({ ...req.body.notification })
+      );
+
+      const cachedResult = await redisClient.setAsync(
+        hash,
+        JSON.stringify(insertedGraph)
       );
 
       return res.json(insertedGraph);
