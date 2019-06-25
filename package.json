@@ -16,23 +16,23 @@
     "dev": "cross-env-shell NODE_ENV=dev DEBUG=notifications-ui:* \"npm run migrate:dev && npm run seed:dev && nodemon ./bin/www\""
   },
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "cross-env": "^5.2.0",
-    "dotenv": "^8.0.0",
-    "express": "~4.16.1",
-    "express-rate-limit": "^5.0.0",
-    "express-validator": "^5.3.1",
-    "knex": "^0.17.6",
-    "morgan": "~1.9.1",
-    "objection": "^1.6.9",
-    "pg": "^7.11.0",
-    "redis": "^2.8.0",
-    "rotating-file-stream": "^1.4.1"
+    "cookie-parser": "1.4.4",
+    "cross-env": "5.2.0",
+    "dotenv": "8.0.0",
+    "express": "4.16.1",
+    "express-rate-limit": "5.0.0",
+    "express-validator": "5.3.1",
+    "knex": "0.17.6",
+    "morgan": "1.9.1",
+    "objection": "1.6.9",
+    "pg": "7.11.0",
+    "redis": "2.8.0",
+    "rotating-file-stream": "1.4.1"
   },
   "devDependencies": {
-    "debug": "^4.1.1",
-    "jest": "^24.7.1",
-    "supertest": "^4.0.2"
+    "debug": "4.1.1",
+    "jest": "24.7.1",
+    "supertest": "4.0.2"
   },
   "jest": {
     "verbose": true,
