@@ -17,10 +17,9 @@ services:
       - ${API_SERVER_PORT}
     environment:
       PG_CONNECTION_STRING: 'postgresql://postgres:postgres@db/notifications'
-      NODE_ENV: ${NODE_ENV}
       REACT_APP_PORT: ${REACT_APP_PORT}
       API_SERVER_PORT: ${API_SERVER_PORT}
-      NGINX_PORT: ß${NGINX_PORT}
+      NGINX_PORT: ${NGINX_PORT}
     ports:
       - ${API_SERVER_PORT}:${API_SERVER_PORT}
     volumes:
