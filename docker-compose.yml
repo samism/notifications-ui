@@ -10,6 +10,12 @@ services:
     ports:
       - 5432:5432
 
+  cache:
+    image: redis:5-alpine
+    restart: on-failure
+    expose:
+      - 6379
+
   server:
     restart: on-failure
     build: ./
@@ -17,6 +23,7 @@ services:
       - ${API_SERVER_PORT}
     environment:
       PG_CONNECTION_STRING: 'postgresql://postgres:postgres@db/notifications'
+      REDIS_URL: 'redis://cache'
       REACT_APP_PORT: ${REACT_APP_PORT}
       API_SERVER_PORT: ${API_SERVER_PORT}
       NGINX_PORT: ${NGINX_PORT}
@@ -26,8 +33,10 @@ services:
       - ./:/usr/app/notifications-ui-server
     depends_on:
       - db
+      - cache
     links:
       - db
+      - cache
 
   client:
     restart: on-failure
