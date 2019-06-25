@@ -39,7 +39,7 @@ router.get('/notifications/', async (req, res, next) => {
       'issue_types.issue_type_id'
     );
 
-  const cachedResult = await redisClient.setAsync(
+  await redisClient.setAsync(
     'notifications:all',
     JSON.stringify(notifications)
   );
@@ -81,7 +81,7 @@ router.get(
         )
         .where('notification_id', '=', req.params.id);
 
-      const cachedResult = await redisClient.setAsync(
+      await redisClient.setAsync(
         `notifications:${req.params.id}`,
         JSON.stringify(notification)
       );
@@ -132,16 +132,16 @@ router.post(
     }
 
     try {
-      const insertedGraph = await transaction(Notification.knex(), trx =>
+      const insertedNotification = await transaction(Notification.knex(), trx =>
         Notification.query(trx).insertAndFetch({ ...req.body.notification })
       );
 
-      const cachedResult = await redisClient.setAsync(
-        hash,
-        JSON.stringify(insertedGraph)
-      );
+      //avoid unnecessary db writes - exact duplicate notif per the hash
+      await redisClient.setAsync(hash, JSON.stringify(insertedNotification));
 
-      return res.json(insertedGraph);
+      await redisClient.delAsync('notifications:all'); // necessitate a db read to display this new one
+
+      return res.json(insertedNotification);
     } catch (error) {
       return res.status(400).json(error);
     }
